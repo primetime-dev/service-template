@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-and-deploy:
     uses: primetime-dev/.github/.github/workflows/docker-build-deploy.yml@main
