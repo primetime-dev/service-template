@@ -14,8 +14,8 @@ jobs:
     uses: primetime-dev/.github/.github/workflows/docker-build-deploy.yml@main
     with:
       image-name: {{cookiecutter.service_slug}}
-      deployment-name: {{cookiecutter.service_slug}}
-      container-name: {{cookiecutter.service_slug}}
+      release-name: {{cookiecutter.service_slug}}
       namespace: demo-services
+      values-file: deploy/values.yaml
     secrets:
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}

@@ -8,7 +8,7 @@ It generates a starter repo that already matches the shared conventions for:
 - local `Makefile` commands
 - Docker image build
 - reusable GitHub Actions workflows
-- Kubernetes deployment and service manifests
+- shared Helm chart consumption
 
 ## Usage
 
@@ -39,7 +39,9 @@ The generated repo includes:
 
 - a simple Flask API service
 - `make bootstrap`, `make lint`, `make test`, and `make build`
-- K8s manifests wired to the service slug, GHCR owner, and container port
+- `/healthz` and `/readyz` endpoints on port `8080` by default
+- Helm-first deployment guidance using the shared `flask-service` chart
+- a `deploy/values.yaml` file for repo-owned chart settings
 - reusable CI and deploy workflow references
 
 The generated service README also includes a quick-start flow for:

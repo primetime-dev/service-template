@@ -24,7 +24,7 @@ class CookiecutterTemplateTests(unittest.TestCase):
 
         self.assertEqual(config["service_name"], "Example Service API")
         self.assertEqual(config["description"], "Standardized Python API service.")
-        self.assertEqual(config["container_port"], "8000")
+        self.assertEqual(config["container_port"], "8080")
         self.assertEqual(config["ghcr_owner"], "primetime-dev")
         self.assertIn("cookiecutter.service_name", config["service_slug"])
         self.assertIn("cookiecutter.service_slug", config["python_package"])
@@ -37,10 +37,9 @@ class CookiecutterTemplateTests(unittest.TestCase):
             TEMPLATE_ROOT / "Makefile",
             TEMPLATE_ROOT / "pyproject.toml",
             TEMPLATE_ROOT / ".gitignore",
+            TEMPLATE_ROOT / "deploy" / "values.yaml",
             TEMPLATE_ROOT / ".github" / "workflows" / "ci.yml",
             TEMPLATE_ROOT / ".github" / "workflows" / "deploy-image.yml",
-            TEMPLATE_ROOT / "k8s" / "deployment.yaml",
-            TEMPLATE_ROOT / "k8s" / "service.yaml",
             TEMPLATE_ROOT / "src" / "{{cookiecutter.python_package}}" / "__init__.py",
             TEMPLATE_ROOT / "src" / "{{cookiecutter.python_package}}" / "main.py",
             TEMPLATE_ROOT / "tests" / "test_app.py",
@@ -49,18 +48,16 @@ class CookiecutterTemplateTests(unittest.TestCase):
         for expected_path in expected_paths:
             self.assertTrue(expected_path.exists(), f"Missing template file: {expected_path}")
 
-    def test_kubernetes_manifest_uses_template_variables(self) -> None:
-        """The deployment should render the service slug, registry owner, and port."""
-        deployment = (
-            TEMPLATE_ROOT / "k8s" / "deployment.yaml"
+    def test_deploy_files_use_template_variables(self) -> None:
+        """The deploy workflow should render the service slug and values file path."""
+        workflow = (
+            TEMPLATE_ROOT / ".github" / "workflows" / "deploy-image.yml"
         ).read_text(encoding="utf-8")
-        service = (TEMPLATE_ROOT / "k8s" / "service.yaml").read_text(encoding="utf-8")
+        values_file = (TEMPLATE_ROOT / "deploy" / "values.yaml").read_text(encoding="utf-8")
 
-        self.assertIn("{{cookiecutter.service_slug}}", deployment)
-        self.assertIn("ghcr.io/{{cookiecutter.ghcr_owner}}/{{cookiecutter.service_slug}}", deployment)
-        self.assertIn("{{cookiecutter.container_port}}", deployment)
-        self.assertIn("{{cookiecutter.service_slug}}", service)
-        self.assertIn("targetPort: {{cookiecutter.container_port}}", service)
+        self.assertIn("{{cookiecutter.service_slug}}", workflow)
+        self.assertIn("values-file: deploy/values.yaml", workflow)
+        self.assertIn("{{cookiecutter.service_slug}}.demo.local", values_file)
 
 
 if __name__ == "__main__":

@@ -20,11 +20,23 @@ class ServiceTemplateTests(unittest.TestCase):
             {"message": "hello world from {{cookiecutter.service_slug}}"},
         )
 
-    def test_health_returns_ok(self) -> None:
-        """The generated service exposes a basic health endpoint."""
+    def test_healthz_returns_ok(self) -> None:
+        """The generated service exposes a basic liveness endpoint."""
         client = create_app().test_client()
 
-        response = client.get("/health")
+        response = client.get("/healthz")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.get_json(),
+            {"service": "{{cookiecutter.service_slug}}", "status": "ok"},
+        )
+
+    def test_readyz_returns_ok(self) -> None:
+        """The generated service exposes a basic readiness endpoint."""
+        client = create_app().test_client()
+
+        response = client.get("/readyz")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(

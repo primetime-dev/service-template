@@ -13,8 +13,14 @@ def create_app() -> Flask:
             {"message": "hello world from {{cookiecutter.service_slug}}"},
         ), 200
 
-    @app.get("/health")
-    def health() -> tuple[object, int]:
+    @app.get("/healthz")
+    def healthz() -> tuple[object, int]:
+        return jsonify(
+            {"service": "{{cookiecutter.service_slug}}", "status": "ok"},
+        ), 200
+
+    @app.get("/readyz")
+    def readyz() -> tuple[object, int]:
         return jsonify(
             {"service": "{{cookiecutter.service_slug}}", "status": "ok"},
         ), 200

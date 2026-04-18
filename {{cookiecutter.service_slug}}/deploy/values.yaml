@@ -1,0 +1,8 @@
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: {{cookiecutter.service_slug}}.demo.local
+      paths:
+        - path: /
+          pathType: Prefix
