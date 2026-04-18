@@ -2,28 +2,32 @@
 
 import unittest
 
-from {{cookiecutter.python_package}}.main import build_response
+from {{cookiecutter.python_package}}.main import create_app
 
 
 class ServiceTemplateTests(unittest.TestCase):
     """Verify the generated service contract."""
 
+    def test_root_returns_service_specific_hello_world(self) -> None:
+        """The root endpoint returns a simple service-specific payload."""
+        client = create_app().test_client()
+
+        response = client.get("/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.get_json(),
+            {"message": "hello world from {{cookiecutter.service_slug}}"},
+        )
+
     def test_health_returns_ok(self) -> None:
         """The generated service exposes a basic health endpoint."""
-        status_code, payload = build_response("/health")
+        client = create_app().test_client()
 
-        self.assertEqual(status_code, 200)
-        self.assertEqual(payload, {"service": "{{cookiecutter.service_slug}}", "status": "ok"})
+        response = client.get("/health")
 
-    def test_template_endpoint_describes_golden_path(self) -> None:
-        """The generated service advertises the expected starter behavior."""
-        status_code, payload = build_response("/template")
-
-        self.assertEqual(status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            payload,
-            {
-                "repo_type": "template",
-                "workflow": "shared-golden-path",
-            },
+            response.get_json(),
+            {"service": "{{cookiecutter.service_slug}}", "status": "ok"},
         )

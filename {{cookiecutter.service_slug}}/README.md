@@ -15,10 +15,40 @@ and Kubernetes conventions.
 - Build the image: `docker build -t {{cookiecutter.service_slug}}:dev .`
 - Apply manifests: `kubectl apply -f k8s/`
 
+## Quick Start
+
+Start the service directly:
+
+```bash
+make bootstrap
+PYTHONPATH=src uv run --frozen python -m {{cookiecutter.python_package}}.main
+```
+
+In another terminal, verify it is serving traffic:
+
+```bash
+curl http://127.0.0.1:{{cookiecutter.container_port}}/
+curl http://127.0.0.1:{{cookiecutter.container_port}}/health
+```
+
+Build and run the container:
+
+```bash
+docker build -t {{cookiecutter.service_slug}}:dev .
+docker run --rm -p {{cookiecutter.container_port}}:{{cookiecutter.container_port}} {{cookiecutter.service_slug}}:dev
+```
+
+Then verify the containerized service:
+
+```bash
+curl http://127.0.0.1:{{cookiecutter.container_port}}/
+curl http://127.0.0.1:{{cookiecutter.container_port}}/health
+```
+
 ## Endpoints
 
+- `GET /`
 - `GET /health`
-- `GET /template`
 
 ## Pipeline
 

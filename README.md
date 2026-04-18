@@ -37,7 +37,13 @@ Cookiecutter prompts for:
 
 The generated repo includes:
 
-- a standard-library Python HTTP service
+- a simple Flask API service
 - `make bootstrap`, `make lint`, `make test`, and `make build`
 - K8s manifests wired to the service slug, GHCR owner, and container port
 - reusable CI and deploy workflow references
+
+The generated service README also includes a quick-start flow for:
+
+- local startup with the project toolchain
+- building and running the Docker image
+- verifying the service with `curl`
