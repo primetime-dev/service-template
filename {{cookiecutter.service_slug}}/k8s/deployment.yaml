@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{cookiecutter.service_slug}}
+  namespace: demo-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{cookiecutter.service_slug}}
+  template:
+    metadata:
+      labels:
+        app: {{cookiecutter.service_slug}}
+    spec:
+      containers:
+        - name: {{cookiecutter.service_slug}}
+          image: ghcr.io/{{cookiecutter.ghcr_owner}}/{{cookiecutter.service_slug}}:latest
+          ports:
+            - containerPort: {{cookiecutter.container_port}}

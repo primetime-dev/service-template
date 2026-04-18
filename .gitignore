@@ -1,0 +1,8 @@
+.tmp/
+xcrun_db
+.venv/
+.DS_Store
+.uv-cache/
+
+*.pyc
+__pycache__/

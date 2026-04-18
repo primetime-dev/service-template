@@ -1,0 +1,8 @@
+{
+  "service_name": "Example Service API",
+  "description": "Standardized Python API service.",
+  "service_slug": "{{ cookiecutter.service_name.lower().replace(' ', '-').replace('_', '-') }}",
+  "python_package": "{{ cookiecutter.service_slug.replace('-', '_') }}",
+  "container_port": "8000",
+  "ghcr_owner": "primetime-dev"
+}

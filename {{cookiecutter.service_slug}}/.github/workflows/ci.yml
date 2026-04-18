@@ -1,0 +1,8 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  python-api-ci:
+    uses: primetime-dev/.github/.github/workflows/python-api-ci.yml@main
