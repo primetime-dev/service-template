@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 import unittest
+
+from jinja2 import StrictUndefined
+from jinja2 import Template
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +62,24 @@ class CookiecutterTemplateTests(unittest.TestCase):
         self.assertIn("{{cookiecutter.service_slug}}", workflow)
         self.assertIn("values-file: deploy/values.yaml", workflow)
         self.assertIn("{{cookiecutter.service_slug}}.demo.local", values_file)
+
+    def test_deploy_workflow_renders_github_actions_secrets_literal(self) -> None:
+        """GitHub Actions expressions should survive Cookiecutter rendering."""
+        workflow = (
+            TEMPLATE_ROOT / ".github" / "workflows" / "deploy-image.yml"
+        ).read_text(encoding="utf-8")
+
+        rendered = Template(workflow, undefined=StrictUndefined).render(
+            cookiecutter=SimpleNamespace(service_slug="example-service-api")
+        )
+
+        self.assertIn("KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}", rendered)
+
+    def test_template_image_declares_non_root_runtime_user(self) -> None:
+        """Generated images must satisfy runAsNonRoot admission checks."""
+        dockerfile = (TEMPLATE_ROOT / "Dockerfile").read_text(encoding="utf-8")
+
+        self.assertIn("USER 10001", dockerfile)
 
 
 if __name__ == "__main__":

@@ -18,4 +18,4 @@ jobs:
       namespace: demo-services
       values-file: deploy/values.yaml
     secrets:
-      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      KUBE_CONFIG: ${% raw %}{{ secrets.KUBE_CONFIG }}{% endraw %}

@@ -6,3 +6,4 @@ xcrun_db
 
 *.pyc
 __pycache__/
+dist/
