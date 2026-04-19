@@ -21,13 +21,13 @@ export UV_CACHE_DIR
 
 bootstrap:
 	mkdir -p $(TMPDIR) $(UV_CACHE_DIR)
-	$(UV) sync --frozen
+	$(UV) sync
 
 pre-lint:
 
 lint:
 	mkdir -p $(TMPDIR) $(UV_CACHE_DIR)
-	PYTHONPATH=$(PYTHONPATH) $(UV) run --frozen python -m compileall src tests
+	PYTHONPATH=$(PYTHONPATH) $(UV) run python -m compileall src tests
 
 post-lint:
 
@@ -35,7 +35,7 @@ pre-test:
 
 test:
 	mkdir -p $(TMPDIR) $(UV_CACHE_DIR)
-	PYTHONPATH=$(PYTHONPATH) $(UV) run --frozen python -m unittest discover -s tests -p 'test_*.py'
+	PYTHONPATH=$(PYTHONPATH) $(UV) run python -m unittest discover -s tests -p 'test_*.py'
 
 post-test:
 

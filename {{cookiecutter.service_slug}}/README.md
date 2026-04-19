@@ -11,7 +11,7 @@ and Kubernetes conventions.
 - Lint: `make lint`
 - Run tests: `make test`
 - Build the package: `make build`
-- Start the API: `PYTHONPATH=src uv run --frozen python -m {{cookiecutter.python_package}}.main`
+- Start the API: `PYTHONPATH=src uv run python -m {{cookiecutter.python_package}}.main`
 - Build the image: `docker build -t {{cookiecutter.service_slug}}:dev .`
 - Render shared chart: `helm template {{cookiecutter.service_slug}} oci://ghcr.io/{{cookiecutter.ghcr_owner}}/charts/flask-service --version 0.1.0 -f deploy/values.yaml --set image.repository=ghcr.io/{{cookiecutter.ghcr_owner}}/{{cookiecutter.service_slug}} --set image.tag=dev`
 
@@ -21,7 +21,7 @@ Start the service directly:
 
 ```bash
 make bootstrap
-PYTHONPATH=src uv run --frozen python -m {{cookiecutter.python_package}}.main
+PYTHONPATH=src uv run python -m {{cookiecutter.python_package}}.main
 ```
 
 In another terminal, verify it is serving traffic:

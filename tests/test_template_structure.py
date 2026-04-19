@@ -81,6 +81,14 @@ class CookiecutterTemplateTests(unittest.TestCase):
 
         self.assertIn("USER 10001", dockerfile)
 
+    def test_template_image_installs_dependencies_with_uv(self) -> None:
+        """Generated images should use project metadata instead of duplicate pip pins."""
+        dockerfile = (TEMPLATE_ROOT / "Dockerfile").read_text(encoding="utf-8")
+
+        self.assertIn("COPY pyproject.toml uv.lock ./", dockerfile)
+        self.assertIn("uv sync --no-dev --no-install-project", dockerfile)
+        self.assertNotIn("pip install --no-cache-dir flask", dockerfile)
+
 
 if __name__ == "__main__":
     unittest.main()
